@@ -1,0 +1,115 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #20374B;
+}
+
+
+/* header */
+header {
+    width: 100%;
+    height: 70px;
+    position: fixed;
+}
+
+header nav .menu {
+    background-color: #F6E050;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+}
+
+header nav {
+    width: 90%;
+    height: 70px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav .social-media span {
+    display: inline-block;
+    background-color: #F6E050;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin-left: 1rem;
+}
+
+/* landing */
+
+.landing {
+    font-family: 'Quicksand', sans-serif;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing .landing-content {
+    text-align: center;
+    color: white;
+}
+
+.landing-content h1 {
+    font-size:80px;
+    margin-bottom: .5rem;
+}
+
+.landing-content h2 {
+    font-size:30px;
+    margin-bottom: 2rem;
+}
+
+.landing-content span {
+    color: #F6E050;
+    font-weight: bold;
+}
+
+/* about */
+
+.about {
+    height: 100vh;
+    background-color: white;
+    padding-top: 4rem;
+}
+
+.about .about-content {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-content h1 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 60px;
+}
+
+.about-content .about-info {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.about-content .about-info .description {
+    width: 50%;
+    text-align: justify;
+    background-color: #20374B;
+    padding: 2rem;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+.about-content .about-info .img {
+    background-color: #F6E050;
+    width: 25%;
+    border-radius: 50%;
+    height: 250px;
+}
