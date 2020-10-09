@@ -33,12 +33,24 @@ header nav {
 }
 
 header nav .social-media span {
-    display: inline-block;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
     background-color: #F6E050;
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
     margin-left: 1rem;
+}
+
+header nav .menu {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+header nav .social-media {
+    display: flex;
 }
 
 /* landing */
@@ -71,6 +83,10 @@ header nav .social-media span {
     font-weight: bold;
 }
 
+.landing-content a {
+    text-decoration: none;
+}
+
 /* about */
 
 .about {
@@ -89,10 +105,15 @@ header nav .social-media span {
 .about-content h1 {
     font-family: 'Quicksand', sans-serif;
     font-size: 60px;
+    color:#20374B;
+}
+
+.about-content h1 span {
+    border-bottom: 6px solid #F6E050;
 }
 
 .about-content .about-info {
-    margin-top: 3rem;
+    margin-top:3rem;
     display: flex;
     justify-content: space-around;
 }
@@ -112,4 +133,181 @@ header nav .social-media span {
     width: 25%;
     border-radius: 50%;
     height: 250px;
+}
+
+/* services */
+
+.services {
+    padding-top: 4rem;
+    height: 100vh;
+}
+
+.services .services-content {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.services-content h1 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 60px;
+    color: white;
+}
+
+.services-content h1 span {
+    border-bottom: 6px solid #F6E050;
+}
+
+.services-content .service-boxes {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 4rem;
+}
+
+.services-content .service-boxes .service-box {
+    width: 300px;
+    height: 360px;
+    background: -moz-linear-gradient(top, #f6e050 0%, #0ec297 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #f6e050 0%,#0ec297 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #f6e050 0%,#0ec297 100%);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.services-content .service-boxes .service-box h3 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 30px;
+    color: #20374B;
+    margin-bottom: 1rem;
+}
+
+.services-content .service-boxes .service-box span {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+
+
+/* projects */
+
+.projects {
+    padding-top: 4rem;
+    height: 100vh;
+    background-color: white;
+}
+
+.projects .projects-content {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.projects .projects-content h1 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 60px;
+    color:#20374B;;
+}
+
+.projects-content h1 span {
+    border-bottom: 6px solid #F6E050;
+}
+
+.projects-content .project .circle {
+    height: 8rem;
+    width: 8rem;
+    border-radius: 50%;
+    background: -moz-linear-gradient(top, #f6e050 0%, #0ec297 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #f6e050 0%,#0ec297 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #f6e050 0%,#0ec297 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    color: white;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.projects-content .projects-box {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 5rem;
+    width: 100%;
+    height: 80%;
+}
+
+.projects-content .projects-box .project {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.projects-content .projects-box .project h3 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 30px;
+    color: #20374B;
+    margin-bottom: 1rem;
+    margin-top: .5rem;
+}
+
+.projects-content .projects-box .project .project-desc {
+    font-family: 'Poppins', sans-serif;
+}
+
+.projects-content .projects-box .project .project-desc  a {
+    text-decoration: none;
+    color: white;
+    background:#0ec297;
+    padding: .4rem;
+    border-radius: 7px;
+}
+
+.projects-content .projects-box .project .project-desc  .links {
+    margin-top: .5rem;
+}
+
+/* contact */
+
+.contact {
+    height: 100vh;
+    font-family: 'Quicksand', sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.contact .title {
+    font-size: 60px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.contact .contact-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact .email {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 65px;
+    color: #F6E050;
+    margin-bottom: .5rem;
+}
+
+.contact .email a {
+    color: #F6E050;
+    text-decoration: none;
+}
+
+
+.fab, .fas {
+    color: white;
+    margin-bottom: .5rem;
 }
