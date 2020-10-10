@@ -20,6 +20,7 @@ header nav .menu {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
+  z-index: 200;
 }
 
 header nav {
@@ -112,9 +113,10 @@ header nav .social-media {
 }
 
 .about-content .about-info {
-  margin-top: 3rem;
   display: flex;
   justify-content: space-around;
+  height: 70%;
+  align-items: center;
 }
 
 .about-content .about-info .description {
@@ -129,11 +131,9 @@ header nav .social-media {
   margin-top: 2rem;
 }
 
-.about-content .about-info .img {
-  background-color: #f6e050;
-  width: 250px;
+.about-content .about-info img {
   border-radius: 50%;
-  height: 250px;
+  border: 10px solid #f6e050;
 }
 
 /* services */
@@ -404,4 +404,124 @@ header nav .social-media {
   margin-top: 4rem;
   text-transform: uppercase;
   font-size: 1.3rem;
+}
+
+/* hamburguer menu */
+
+.nav-links {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  flex-direction: column;
+  background-color: #0ec297;
+  display: flex;
+  list-style-type: none;
+  align-items: center;
+  justify-content: space-evenly;
+  clip-path: circle(0px at 0% 0%);
+  -webkit-clip-path: circle(0px at 0% 0%);
+  transition: all 1s ease-out;
+  pointer-events: none;
+}
+
+.nav-links.open {
+  clip-path: circle(1800px at 0%);
+  -webkit-clip-path: circle(1800px at 0%);
+  pointer-events: all;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* media query */
+
+@media screen and (max-width: 768px) {
+  .social-media {
+    display: none;
+  }
+
+  .landing {
+    height: 100vh;
+    width: auto;
+  }
+
+  .about {
+    height: auto;
+  }
+
+  .about .about-content {
+    height: auto;
+  }
+
+  .about-content .about-info .description {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .about-content img {
+    margin-bottom: 1rem;
+  }
+
+  .about-content .about-info {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .services {
+    height: auto;
+  }
+
+  .services-content .service-box {
+    margin-bottom: 1.3rem;
+  }
+
+  .projects {
+    height: auto;
+  }
+
+  .projects .project {
+    margin-bottom: 1.5rem;
+  }
+
+  .services-content .service-boxes {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .services button {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .projects-content .projects-box {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact .title {
+    text-align: center;
+  }
+
+  .contact .email a {
+    font-size: 2rem;
+  }
+
+  .landing .landing-content {
+    padding: 2rem;
+  }
+
+  .modal {
+    width: 90%;
+    font-size: 0.75rem;
+  }
 }
