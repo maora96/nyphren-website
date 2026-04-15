@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProjectBlocks, getProjectBySlug } from "@/lib/projects";
 import Nav from "@/app/components/navbar";
@@ -73,11 +74,21 @@ export default async function ProjectPage({ params }: PageProps) {
       </section>
 
       {/* VISUAL */}
-      <section className="-mt-10 px-6 pb-16">
-        <div className="mx-auto max-w-5xl">
-          <div className="relative h-[300px] overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#94C7B4]/40 via-[#f3efe7] to-[#30253E]/10" />
-        </div>
-      </section>
+      {project.coverUrl && (
+        <section className="-mt-10 px-6 pb-16">
+          <div className="mx-auto max-w-5xl">
+            <div className="relative h-[300px] overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#94C7B4]/40 via-[#f3efe7] to-[#30253E]/10">
+              <Image
+                src={project.coverUrl || ""}
+                alt={project.title}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CONTENT */}
       <section className="px-6 pb-24">
