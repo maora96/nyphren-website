@@ -1,14 +1,15 @@
-import { notion, NOTION_BLOG_DATA_SOURCE_ID } from "./notion";
+import { notion, NOTION_PROJECTS_DATA_SOURCE_ID } from "./notion";
 
-export type BlogPostMeta = {
+export type ProjectMeta = {
   id: string;
   title: string;
   slug: string;
-  excerpt: string;
+  description: string;
   published: boolean;
   publishDate: string | null;
   tags: string[];
   featured: boolean;
+  status: string | null;
   coverUrl: string | null;
 };
 
@@ -36,25 +37,26 @@ function richTextToPlainText(value: RichTextItem[] | undefined): string {
   return value.map((item) => item.plain_text ?? "").join("");
 }
 
-function mapPageToPostMeta(page: any): BlogPostMeta {
+function mapPageToProjectMeta(page: any): ProjectMeta {
   return {
     id: page.id,
     title: richTextToPlainText(page.properties?.Name?.title),
     slug: richTextToPlainText(page.properties?.slug?.rich_text),
-    excerpt: richTextToPlainText(page.properties?.excerpt?.rich_text),
+    description: richTextToPlainText(page.properties?.description?.rich_text),
     published: Boolean(page.properties?.published?.checkbox),
     publishDate: page.properties?.publish_date?.date?.start ?? null,
     tags: (page.properties?.tags?.multi_select ?? []).map(
       (tag: { name: string }) => tag.name,
     ),
     featured: Boolean(page.properties?.featured?.checkbox),
+    status: page.properties?.status?.select?.name ?? null,
     coverUrl: getCoverUrl(page),
   };
 }
 
-export async function getAllPublishedPosts(): Promise<BlogPostMeta[]> {
+export async function getAllPublishedProjects(): Promise<ProjectMeta[]> {
   const response = await notion.dataSources.query({
-    data_source_id: NOTION_BLOG_DATA_SOURCE_ID,
+    data_source_id: NOTION_PROJECTS_DATA_SOURCE_ID,
     filter: {
       and: [
         {
@@ -74,15 +76,15 @@ export async function getAllPublishedPosts(): Promise<BlogPostMeta[]> {
   });
 
   return response.results
-    .map(mapPageToPostMeta)
-    .filter((post) => post.slug && post.title);
+    .map(mapPageToProjectMeta)
+    .filter((project) => project.slug && project.title);
 }
 
-export async function getPostBySlug(
+export async function getProjectBySlug(
   slug: string,
-): Promise<BlogPostMeta | null> {
+): Promise<ProjectMeta | null> {
   const response = await notion.dataSources.query({
-    data_source_id: NOTION_BLOG_DATA_SOURCE_ID,
+    data_source_id: NOTION_PROJECTS_DATA_SOURCE_ID,
     filter: {
       and: [
         {
@@ -105,10 +107,10 @@ export async function getPostBySlug(
   const page = response.results[0];
   if (!page) return null;
 
-  return mapPageToPostMeta(page);
+  return mapPageToProjectMeta(page);
 }
 
-export type BlogBlock =
+export type ProjectBlock =
   | { type: "paragraph"; text: string }
   | { type: "heading_1"; text: string }
   | { type: "heading_2"; text: string }
@@ -123,7 +125,9 @@ function blockText(block: any): string {
   return richTextToPlainText(richText);
 }
 
-export async function getPageBlocks(pageId: string): Promise<BlogBlock[]> {
+export async function getProjectBlocks(
+  pageId: string,
+): Promise<ProjectBlock[]> {
   const response = await notion.blocks.children.list({
     block_id: pageId,
     page_size: 100,
@@ -141,12 +145,12 @@ export async function getPageBlocks(pageId: string): Promise<BlogBlock[]> {
     ];
 
     if (!supported.includes(block.type)) {
-      return { type: "unsupported", text: "" } as BlogBlock;
+      return { type: "unsupported", text: "" } as ProjectBlock;
     }
 
     return {
       type: block.type,
       text: blockText(block),
-    } as BlogBlock;
+    } as ProjectBlock;
   });
 }

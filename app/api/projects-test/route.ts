@@ -8,7 +8,7 @@ export async function GET() {
 
   try {
     const response = await notion.dataSources.query({
-      data_source_id: process.env.NOTION_DATA_SOURCE_ID!,
+      data_source_id: process.env.NOTION_PROJECTS_DATA_SOURCE_ID!,
     });
 
     return NextResponse.json({

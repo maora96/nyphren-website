@@ -1,24 +1,33 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getPageBlocks, getPostBySlug } from "@/lib/blog";
+import Nav from "@/app/components/navbar";
 
-export default function PostPage() {
-  const post = {
-    title: "The cost of saving a world",
-    excerpt:
-      "Saving a world is never free, and the price might not be what you expect.",
-    content: `
-      Saving a world is never free.
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
 
-      The stories we tell about heroes often ignore what happens after the victory.
-      The quiet aftermath, the cost, the absence.
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
-      What happens when the one meant to die… survives?
+  if (!post) {
+    return { title: "Post not found" };
+  }
 
-      Maybe the story doesn’t end there.
-    `,
-    tags: ["Fantasy", "Writing"],
-    date: "April 13, 2026",
-    readTime: "3 min read",
+  return {
+    title: `${post.title} | nyphren`,
+    description: post.excerpt,
   };
+}
+
+export default async function PostPage({ params }: PageProps) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+
+  if (!post) notFound();
+
+  const blocks = await getPageBlocks(post.id);
 
   return (
     <main className="min-h-screen bg-[#f7f4ee] text-black [font-family:var(--font-inter)]">
@@ -27,28 +36,11 @@ export default function PostPage() {
         <div className="absolute inset-0 -z-10 bg-[#30253E]" />
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,#63887255_0%,transparent_40%)]" />
 
-        {/* NAV */}
-        <nav className="border-b border-white/10 bg-[#30253E]/60 backdrop-blur-md">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-            <Link
-              href="/"
-              className="text-xl text-[#C3D88C] [font-family:var(--font-playfair),serif]"
-            >
-              nyphren
-            </Link>
-
-            <Link
-              href="/blog"
-              className="text-sm text-white/70 transition hover:text-white"
-            >
-              ← back to blog
-            </Link>
-          </div>
-        </nav>
+        <Nav />
 
         <div className="mx-auto max-w-3xl px-6 pb-20 pt-16 text-center">
           <p className="mb-3 text-xs uppercase tracking-[0.2em] text-[#94C7B4]">
-            {post.date} · {post.readTime}
+            {post.publishDate ?? ""}
           </p>
 
           <h1 className="mb-6 text-4xl leading-tight text-[#f7f4ee] md:text-6xl [font-family:var(--font-playfair),serif]">
@@ -63,7 +55,6 @@ export default function PostPage() {
       <article className="px-6 py-20">
         <div className="mx-auto max-w-3xl">
           <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#f6f1e8] via-[#f3efe7] to-[#ebe5da] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.12)]">
-            {/* TEXTURA */}
             <div className="pointer-events-none absolute inset-0 opacity-[0.05] mix-blend-multiply">
               <img
                 src="/bg-paper-texture.avif"
@@ -72,23 +63,88 @@ export default function PostPage() {
               />
             </div>
 
-            {/* CONTENT */}
             <div className="relative z-10">
-              {post.content
-                .trim()
-                .split("\n\n")
-                .map((p, i) => (
+              {blocks.map((block, i) => {
+                if (!block.text) return null;
+
+                if (block.type === "heading_1") {
+                  return (
+                    <h2
+                      key={i}
+                      className="mb-5 mt-10 text-4xl text-[#30253E] [font-family:var(--font-playfair),serif]"
+                    >
+                      {block.text}
+                    </h2>
+                  );
+                }
+
+                if (block.type === "heading_2") {
+                  return (
+                    <h3
+                      key={i}
+                      className="mb-4 mt-8 text-3xl text-[#30253E] [font-family:var(--font-playfair),serif]"
+                    >
+                      {block.text}
+                    </h3>
+                  );
+                }
+
+                if (block.type === "heading_3") {
+                  return (
+                    <h4
+                      key={i}
+                      className="mb-4 mt-6 text-2xl text-[#30253E] [font-family:var(--font-playfair),serif]"
+                    >
+                      {block.text}
+                    </h4>
+                  );
+                }
+
+                if (block.type === "quote") {
+                  return (
+                    <blockquote
+                      key={i}
+                      className="my-8 border-l-4 border-[#94C7B4] pl-5 text-[18px] italic leading-9 text-[#4f4b52]"
+                    >
+                      {block.text}
+                    </blockquote>
+                  );
+                }
+
+                if (block.type === "bulleted_list_item") {
+                  return (
+                    <li
+                      key={i}
+                      className="ml-6 list-disc text-[18px] leading-9 text-[#4f4b52]"
+                    >
+                      {block.text}
+                    </li>
+                  );
+                }
+
+                if (block.type === "numbered_list_item") {
+                  return (
+                    <li
+                      key={i}
+                      className="ml-6 list-decimal text-[18px] leading-9 text-[#4f4b52]"
+                    >
+                      {block.text}
+                    </li>
+                  );
+                }
+
+                return (
                   <p
                     key={i}
                     className="mb-5 text-[18px] leading-9 text-[#4f4b52]"
                   >
-                    {p.trim()}
+                    {block.text}
                   </p>
-                ))}
+                );
+              })}
             </div>
           </div>
 
-          {/* TAGS */}
           <div className="mt-10 flex flex-wrap gap-2">
             {post.tags.map((tag) => (
               <span
@@ -102,7 +158,6 @@ export default function PostPage() {
         </div>
       </article>
 
-      {/* FOOTER */}
       <footer className="bg-[#30253E] py-10 text-center text-sm text-white/60">
         © {new Date().getFullYear()} nyphren
       </footer>
