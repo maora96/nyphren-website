@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-
-type SubscribeBody = {
-  email?: string;
-};
+import { Resend } from "resend";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email }: SubscribeBody = await req.json();
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json(
+        { success: false, message: "Missing RESEND_API_KEY" },
+        { status: 500 },
+      );
+    }
+
+    if (!process.env.RESEND_SEGMENT_ID) {
+      return NextResponse.json(
+        { success: false, message: "Missing RESEND_SEGMENT_ID" },
+        { status: 500 },
+      );
+    }
+
+    const { email } = await req.json();
 
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       return NextResponse.json(
@@ -15,57 +26,37 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!process.env.MAILERLITE_API_KEY) {
-      return NextResponse.json(
-        { success: false, message: "MailerLite is not configured." },
-        { status: 500 },
-      );
-    }
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const payload: Record<string, unknown> = {
+    const { data, error } = await resend.contacts.create({
       email,
-      status: "active",
-    };
-
-    if (process.env.MAILERLITE_GROUP_ID) {
-      payload.groups = [process.env.MAILERLITE_GROUP_ID];
-    }
-
-    const response = await fetch(
-      "https://connect.mailerlite.com/api/subscribers",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${process.env.MAILERLITE_API_KEY}`,
+      unsubscribed: false,
+      segments: [
+        {
+          id: process.env.RESEND_SEGMENT_ID!,
         },
-        body: JSON.stringify(payload),
-        cache: "no-store",
-      },
-    );
+      ],
+    });
 
-    const data = await response.json().catch(() => null);
-
-    if (!response.ok) {
-      const message =
-        data?.message ||
-        data?.errors?.email?.[0] ||
-        "Something went wrong. Please try again.";
-
+    if (error) {
       return NextResponse.json(
-        { success: false, message },
-        { status: response.status },
+        { success: false, message: error.message },
+        { status: 400 },
       );
     }
 
     return NextResponse.json({
       success: true,
       message: "You’re in. New posts will land in your inbox.",
+      data,
     });
-  } catch {
+  } catch (error) {
     return NextResponse.json(
-      { success: false, message: "Something went wrong. Please try again." },
+      {
+        success: false,
+        message:
+          error instanceof Error ? error.message : "Something went wrong.",
+      },
       { status: 500 },
     );
   }

@@ -60,7 +60,7 @@ export default function SubscribePage() {
 
           {/* RIGHT */}
           <div className="w-full">
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#f3efe7]/92 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.20)] md:p-10">
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#f3efe7] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.20)] md:p-10">
               <div className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-multiply">
                 <img
                   src="/bg-paper-texture.avif"

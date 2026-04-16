@@ -10,11 +10,98 @@ export type BlogPostMeta = {
   tags: string[];
   featured: boolean;
   coverUrl: string | null;
+  showOnBlog: boolean;
 };
-
 type RichTextItem = {
   plain_text?: string;
 };
+
+export async function getNewsletterPosts({
+  limit,
+  includeNewsletterOnly,
+}: {
+  limit: number;
+  includeNewsletterOnly: boolean;
+}): Promise<BlogPostMeta[]> {
+  const response = await notion.dataSources.query({
+    data_source_id: NOTION_BLOG_DATA_SOURCE_ID,
+    filter: {
+      and: [
+        {
+          property: "published",
+          checkbox: { equals: true },
+        },
+        {
+          property: "send_to_newsletter",
+          checkbox: { equals: true },
+        },
+        {
+          property: "newsletter_sent",
+          checkbox: { equals: false },
+        },
+      ],
+    },
+    sorts: [
+      {
+        property: "publish_date",
+        direction: "descending",
+      },
+    ],
+  });
+
+  let posts = response.results
+    .map(mapPageToPostMeta)
+    .filter((post) => post.slug && post.title);
+
+  if (!includeNewsletterOnly) {
+    posts = posts.filter((post) => post.showOnBlog);
+  }
+
+  return posts.slice(0, limit);
+}
+
+export async function getPendingNewsletterPosts(): Promise<BlogPostMeta[]> {
+  const response = await notion.dataSources.query({
+    data_source_id: NOTION_BLOG_DATA_SOURCE_ID,
+    filter: {
+      and: [
+        {
+          property: "published",
+          checkbox: {
+            equals: true,
+          },
+        },
+        {
+          property: "newsletter_sent",
+          checkbox: {
+            equals: false,
+          },
+        },
+      ],
+    },
+    sorts: [
+      {
+        property: "publish_date",
+        direction: "ascending",
+      },
+    ],
+  });
+
+  return response.results
+    .map(mapPageToPostMeta)
+    .filter((post) => post.slug && post.title);
+}
+
+export async function markNewsletterSent(pageId: string) {
+  await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      newsletter_sent: {
+        checkbox: true,
+      },
+    },
+  });
+}
 
 function getCoverUrl(page: any): string | null {
   const cover = page.cover;
@@ -49,6 +136,7 @@ function mapPageToPostMeta(page: any): BlogPostMeta {
     ),
     featured: Boolean(page.properties?.featured?.checkbox),
     coverUrl: getCoverUrl(page),
+    showOnBlog: Boolean(page.properties?.show_on_blog?.checkbox),
   };
 }
 
@@ -59,9 +147,11 @@ export async function getAllPublishedPosts(): Promise<BlogPostMeta[]> {
       and: [
         {
           property: "published",
-          checkbox: {
-            equals: true,
-          },
+          checkbox: { equals: true },
+        },
+        {
+          property: "show_on_blog",
+          checkbox: { equals: true },
         },
       ],
     },
@@ -149,4 +239,74 @@ export async function getPageBlocks(pageId: string): Promise<BlogBlock[]> {
       text: blockText(block),
     } as BlogBlock;
   });
+}
+
+export function renderBlocksToHtml(
+  blocks: Array<{ type: string; text: string }>,
+): string {
+  return blocks
+    .map((block) => {
+      if (!block.text) return "";
+
+      const text = block.text;
+
+      if (block.type === "heading_1") {
+        return `<h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.1; color: #30253E; margin: 28px 0 14px;">${text}</h1>`;
+      }
+
+      if (block.type === "heading_2") {
+        return `<h2 style="font-family: Georgia, 'Times New Roman', serif; font-size: 28px; line-height: 1.15; color: #30253E; margin: 24px 0 12px;">${text}</h2>`;
+      }
+
+      if (block.type === "heading_3") {
+        return `<h3 style="font-family: Georgia, 'Times New Roman', serif; font-size: 22px; line-height: 1.2; color: #30253E; margin: 20px 0 10px;">${text}</h3>`;
+      }
+
+      if (block.type === "quote") {
+        return `<blockquote style="margin: 22px 0; padding-left: 16px; border-left: 4px solid #94C7B4; color: #4f4b52; font-style: italic; line-height: 1.8;">${text}</blockquote>`;
+      }
+
+      if (block.type === "bulleted_list_item") {
+        return `<li style="margin: 8px 0; color: #4f4b52; line-height: 1.8;">${text}</li>`;
+      }
+
+      if (block.type === "numbered_list_item") {
+        return `<li style="margin: 8px 0; color: #4f4b52; line-height: 1.8;">${text}</li>`;
+      }
+
+      return `<p style="margin: 0 0 16px; color: #4f4b52; font-size: 16px; line-height: 1.9;">${text}</p>`;
+    })
+    .join("");
+}
+
+export async function getNewsletterArchivePosts(): Promise<BlogPostMeta[]> {
+  const response = await notion.dataSources.query({
+    data_source_id: NOTION_BLOG_DATA_SOURCE_ID,
+    filter: {
+      and: [
+        {
+          property: "published",
+          checkbox: { equals: true },
+        },
+        {
+          property: "send_to_newsletter",
+          checkbox: { equals: true },
+        },
+        {
+          property: "show_on_blog",
+          checkbox: { equals: false },
+        },
+      ],
+    },
+    sorts: [
+      {
+        property: "publish_date",
+        direction: "descending",
+      },
+    ],
+  });
+
+  return response.results
+    .map(mapPageToPostMeta)
+    .filter((post) => post.slug && post.title);
 }

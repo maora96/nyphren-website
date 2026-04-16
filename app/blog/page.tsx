@@ -40,7 +40,7 @@ export default async function BlogPage() {
         <section className="-mt-8 px-6 pb-12 md:-mt-10">
           <div className="mx-auto max-w-6xl">
             <Link href={`/blog/${featuredPost.slug}`} className="block">
-              <article className="group relative overflow-hidden rounded-[2rem] bg-[#f3efe7]/92 shadow-[0_20px_50px_rgba(0,0,0,0.12)] ring-1 ring-black/5 transition hover:-translate-y-1">
+              <article className="group relative overflow-hidden rounded-[2rem] bg-[#f3efe7] shadow-[0_20px_50px_rgba(0,0,0,0.12)] ring-1 ring-black/5 transition hover:-translate-y-1">
                 <div className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-multiply">
                   <img
                     src="/bg-paper-texture.avif"

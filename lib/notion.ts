@@ -18,6 +18,5 @@ export const notion = new Client({
 
 export const NOTION_BLOG_DATA_SOURCE_ID =
   process.env.NOTION_BLOG_DATA_SOURCE_ID;
-
 export const NOTION_PROJECTS_DATA_SOURCE_ID =
   process.env.NOTION_PROJECTS_DATA_SOURCE_ID;

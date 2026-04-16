@@ -40,7 +40,7 @@ export default async function ProjectsPage() {
         <section className="-mt-10 px-6 pb-16">
           <div className="mx-auto max-w-6xl">
             <Link href={`/projects/${featured.slug}`} className="block">
-              <div className="relative overflow-hidden rounded-[2rem] bg-[#f3efe7]/92 shadow-[0_20px_50px_rgba(0,0,0,0.12)] transition hover:-translate-y-1">
+              <div className="relative overflow-hidden rounded-[2rem] bg-[#f3efe7] shadow-[0_20px_50px_rgba(0,0,0,0.12)] transition hover:-translate-y-1">
                 <div className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-multiply">
                   <img
                     src="/bg-paper-texture.avif"
