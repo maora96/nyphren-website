@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getAllPublishedPosts } from "@/lib/blog";
 import Nav from "../components/navbar";
-
+import NewsletterForm from "../components/newsletter";
+export const revalidate = 60;
 export default async function BlogPage() {
   const posts = await getAllPublishedPosts();
   const featuredPost = posts.find((post) => post.featured) ?? posts[0];
@@ -162,6 +163,8 @@ export default async function BlogPage() {
           </div>
         </div>
       </section>
+
+      <NewsletterForm />
 
       <footer className="border-t border-white/10 bg-[#30253E] px-6 py-10 text-center text-sm text-white/60">
         <p>© {new Date().getFullYear()} nyphren</p>

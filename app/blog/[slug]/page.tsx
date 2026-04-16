@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPageBlocks, getPostBySlug } from "@/lib/blog";
 import Nav from "@/app/components/navbar";
-
+export const revalidate = 60;
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
@@ -47,7 +46,9 @@ export default async function PostPage({ params }: PageProps) {
             {post.title}
           </h1>
 
-          <p className="mx-auto max-w-xl text-white/70">{post.excerpt}</p>
+          <p className="mx-auto max-w-xl text-white/70 [font-family:var(--font-inter)]">
+            {post.excerpt}
+          </p>
         </div>
       </section>
 

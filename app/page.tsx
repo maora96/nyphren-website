@@ -3,6 +3,8 @@ import Link from "next/link";
 import { getAllPublishedPosts } from "@/lib/blog";
 import { getAllPublishedProjects } from "@/lib/projects";
 import Nav from "./components/navbar";
+import NewsletterForm from "./components/newsletter";
+export const revalidate = 60;
 
 export default async function Home() {
   const latestPosts = (await getAllPublishedPosts()).slice(0, 3);
@@ -241,6 +243,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <NewsletterForm />
 
       {/* PROJECTS */}
       <section className="py-28 px-6 bg-gradient-to-b from-[#5f7b73] to-[#30253E] text-white">

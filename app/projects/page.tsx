@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getAllPublishedProjects } from "@/lib/projects";
 import Nav from "../components/navbar";
-
+export const revalidate = 60;
 export default async function ProjectsPage() {
   const projects = await getAllPublishedProjects();
   const featured = projects.find((project) => project.featured) ?? projects[0];

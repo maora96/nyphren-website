@@ -1,9 +1,8 @@
-import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProjectBlocks, getProjectBySlug } from "@/lib/projects";
 import Nav from "@/app/components/navbar";
-
+export const revalidate = 60;
 type PageProps = {
   params: Promise<{ slug: string }>;
 };

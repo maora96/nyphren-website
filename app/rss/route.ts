@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAllPublishedPosts, getPageBlocks } from "@/lib/blog";
-
+export const revalidate = 60;
 function renderBlocksToHtml(
   blocks: Array<{ type: string; text: string }>,
 ): string {
