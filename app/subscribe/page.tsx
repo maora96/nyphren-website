@@ -81,8 +81,7 @@ export default function SubscribePage() {
                 </h2>
 
                 <p className="mb-8 text-[15px] leading-8 text-[#4f4b52]">
-                  New posts are sent by email automatically whenever something
-                  new appears.
+                  New posts are sent by email on the week they are posted.
                 </p>
 
                 <NewsletterForm compact />
