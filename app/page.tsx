@@ -1,13 +1,29 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAllPublishedPosts } from "@/lib/blog";
+import {
+  getAllPublishedPosts,
+  getPageBlocks,
+  calculateReadingTimeFromBlocks,
+} from "@/lib/blog";
 import { getAllPublishedProjects } from "@/lib/projects";
 import Nav from "./components/navbar";
 import NewsletterForm from "./components/newsletter";
 export const revalidate = 60;
 
 export default async function Home() {
-  const latestPosts = (await getAllPublishedPosts()).slice(0, 3);
+  const latestPostsRaw = (await getAllPublishedPosts()).slice(0, 3);
+
+  const latestPosts = await Promise.all(
+    latestPostsRaw.map(async (post) => {
+      const blocks = await getPageBlocks(post.id);
+      const readTime = calculateReadingTimeFromBlocks(blocks);
+
+      return {
+        ...post,
+        readTime,
+      };
+    }),
+  );
   const latestProjects = (await getAllPublishedProjects()).slice(0, 3);
 
   const featuredProject =
@@ -236,7 +252,7 @@ export default async function Home() {
                     <span className="text-[#7a7578]">| {post.publishDate}</span>
                   </div>
 
-                  <p className="text-sm text-[#7a7578]">{1} min</p>
+                  <p className="text-sm text-[#7a7578]">{post.readTime}</p>
                 </div>
               </article>
             ))}

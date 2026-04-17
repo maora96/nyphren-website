@@ -310,3 +310,17 @@ export async function getNewsletterArchivePosts(): Promise<BlogPostMeta[]> {
     .map(mapPageToPostMeta)
     .filter((post) => post.slug && post.title);
 }
+
+export function calculateReadingTimeFromBlocks(
+  blocks: Array<{ type: string; text: string }>,
+): string {
+  const fullText = blocks
+    .map((block) => block.text ?? "")
+    .join(" ")
+    .trim();
+
+  const words = fullText.split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+
+  return `${minutes} min`;
+}
