@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getPageBlocks, getPostBySlug } from "@/lib/blog";
 import Nav from "@/app/components/navbar";
+import NewsletterForm from "@/app/components/newsletter";
 export const revalidate = 60;
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -176,6 +177,8 @@ export default async function PostPage({ params }: PageProps) {
           </div>
         </div>
       </article>
+
+      <NewsletterForm />
 
       <footer className="bg-[#30253E] py-10 text-center text-sm text-white/60">
         © {new Date().getFullYear()} nyphren

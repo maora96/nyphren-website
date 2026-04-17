@@ -115,51 +115,57 @@ export default async function BlogPage() {
           </div>
 
           <div className="grid gap-8 md:grid-cols-2">
-            {otherPosts.map((post, index) => (
-              <Link key={post.id} href={`/blog/${post.slug}`} className="block">
-                <article
-                  className={`group relative overflow-hidden rounded-[2rem] border border-black/5 bg-[#f3efe7]/88 p-7 shadow-[0_10px_28px_rgba(0,0,0,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(0,0,0,0.12)] ${
-                    index % 2 === 1 ? "md:translate-y-6" : ""
-                  }`}
-                >
-                  <div className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-multiply">
-                    <img
-                      src="/bg-paper-texture.avif"
-                      alt=""
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
+            {otherPosts.length > 0
+              ? otherPosts.map((post, index) => (
+                  <Link
+                    key={post.id}
+                    href={`/blog/${post.slug}`}
+                    className="block"
+                  >
+                    <article
+                      className={`group relative overflow-hidden rounded-[2rem] border border-black/5 bg-[#f3efe7]/88 p-7 shadow-[0_10px_28px_rgba(0,0,0,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(0,0,0,0.12)] ${
+                        index % 2 === 1 ? "md:translate-y-6" : ""
+                      }`}
+                    >
+                      <div className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-multiply">
+                        <img
+                          src="/bg-paper-texture.avif"
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
 
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-[#94C7B4]/10" />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-[#94C7B4]/10" />
 
-                  <div className="relative z-10">
-                    <h3 className="mb-4 max-w-[14ch] text-4xl leading-[1.02] text-[#30253E] [font-family:var(--font-playfair),serif]">
-                      {post.title}
-                    </h3>
+                      <div className="relative z-10">
+                        <h3 className="mb-4 max-w-[14ch] text-4xl leading-[1.02] text-[#30253E] [font-family:var(--font-playfair),serif]">
+                          {post.title}
+                        </h3>
 
-                    <p className="mb-6 max-w-[46ch] text-[15px] leading-8 text-[#4f4b52]">
-                      {post.excerpt}
-                    </p>
+                        <p className="mb-6 max-w-[46ch] text-[15px] leading-8 text-[#4f4b52]">
+                          {post.excerpt}
+                        </p>
 
-                    <div className="mb-5 flex flex-wrap items-center gap-2 text-xs">
-                      {post.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded-full bg-[#d9ddd2]/90 px-3 py-1 text-[#4c5147]"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      {post.publishDate && (
-                        <span className="text-[#7a7578]">
-                          | {post.publishDate}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </article>
-              </Link>
-            ))}
+                        <div className="mb-5 flex flex-wrap items-center gap-2 text-xs">
+                          {post.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-full bg-[#d9ddd2]/90 px-3 py-1 text-[#4c5147]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                          {post.publishDate && (
+                            <span className="text-[#7a7578]">
+                              | {post.publishDate}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </article>
+                  </Link>
+                ))
+              : "No other posts yet, stay tuned!"}
           </div>
         </div>
       </section>

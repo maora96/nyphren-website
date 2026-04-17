@@ -210,52 +210,57 @@ export default async function Home() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
-            {latestPosts.map((post) => (
-              <article
-                key={post.title}
-                className="group relative overflow-hidden rounded-2xl border border-black/5 bg-[#f3efe7]/85 p-6 shadow-[0_8px_24px_rgba(0,0,0,0.10)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(0,0,0,0.14)]"
-              >
-                {/* TEXTURA */}
-                <div className="pointer-events-none absolute inset-0 opacity-25 mix-blend-multiply">
-                  <img
-                    src="/bg-paper-texture.avif"
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                </div>
+            {latestPosts.length > 0
+              ? latestPosts.map((post) => (
+                  <Link
+                    key={post.title}
+                    href={`/blog/${post.slug}`}
+                    className="group relative overflow-hidden rounded-2xl border border-black/5 bg-[#f3efe7]/85 p-6 shadow-[0_8px_24px_rgba(0,0,0,0.10)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(0,0,0,0.14)]"
+                  >
+                    {/* TEXTURA */}
+                    <div className="pointer-events-none absolute inset-0 opacity-25 mix-blend-multiply">
+                      <img
+                        src="/bg-paper-texture.avif"
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
 
-                {/* OVERLAY DE COR */}
-                <div className="pointer-events-none absolute inset-0 bg-[#94C7B4]/16" />
+                    {/* OVERLAY DE COR */}
+                    <div className="pointer-events-none absolute inset-0 bg-[#94C7B4]/16" />
 
-                {/* GRADIENT DE PROFUNDIDADE */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-[#30253E]/10" />
+                    {/* GRADIENT DE PROFUNDIDADE */}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-[#30253E]/10" />
 
-                {/* CONTEÚDO */}
-                <div className="relative z-10">
-                  <h3 className="mb-3 text-[2rem] leading-[1.05] [font-family:var(--font-playfair),serif] text-[#30253E] md:text-[2.1rem]">
-                    {post.title}
-                  </h3>
+                    {/* CONTEÚDO */}
+                    <div className="relative z-10">
+                      <h3 className="mb-3 text-[2rem] leading-[1.05] [font-family:var(--font-playfair),serif] text-[#30253E] md:text-[2.1rem]">
+                        {post.title}
+                      </h3>
 
-                  <p className="mb-5 text-[15px] leading-7 text-[#4f4b52]">
-                    {post.excerpt}
-                  </p>
+                      <p className="mb-5 text-[15px] leading-7 text-[#4f4b52]">
+                        {post.excerpt}
+                      </p>
 
-                  <div className="mb-4 flex flex-wrap items-center gap-2 text-xs">
-                    {post.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full bg-[#d9ddd2]/90 px-3 py-1 text-[#4c5147]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                    <span className="text-[#7a7578]">| {post.publishDate}</span>
-                  </div>
+                      <div className="mb-4 flex flex-wrap items-center gap-2 text-xs">
+                        {post.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-full bg-[#d9ddd2]/90 px-3 py-1 text-[#4c5147]"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        <span className="text-[#7a7578]">
+                          | {post.publishDate}
+                        </span>
+                      </div>
 
-                  <p className="text-sm text-[#7a7578]">{post.readTime}</p>
-                </div>
-              </article>
-            ))}
+                      <p className="text-sm text-[#7a7578]">{post.readTime}</p>
+                    </div>
+                  </Link>
+                ))
+              : "No posts yet, stay tuned!"}
           </div>
         </div>
       </section>
