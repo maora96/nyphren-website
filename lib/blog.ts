@@ -199,19 +199,25 @@ export async function getPostBySlug(
 }
 
 export type BlogBlock =
-  | { type: "paragraph"; text: string }
-  | { type: "heading_1"; text: string }
-  | { type: "heading_2"; text: string }
-  | { type: "heading_3"; text: string }
-  | { type: "bulleted_list_item"; text: string }
-  | { type: "numbered_list_item"; text: string }
-  | { type: "quote"; text: string }
-  | { type: "image"; text: string; imageUrl: string | null; caption?: string }
-  | { type: "unsupported"; text: "" };
+  | { type: "paragraph"; text: string; richText: RichTextSpan[] }
+  | { type: "heading_1"; text: string; richText: RichTextSpan[] }
+  | { type: "heading_2"; text: string; richText: RichTextSpan[] }
+  | { type: "heading_3"; text: string; richText: RichTextSpan[] }
+  | { type: "bulleted_list_item"; text: string; richText: RichTextSpan[] }
+  | { type: "numbered_list_item"; text: string; richText: RichTextSpan[] }
+  | { type: "quote"; text: string; richText: RichTextSpan[] }
+  | {
+      type: "image";
+      text: string;
+      imageUrl: string | null;
+      caption?: string;
+      richText: RichTextSpan[];
+    }
+  | { type: "unsupported"; text: ""; richText: RichTextSpan[] };
 
 function blockText(block: any): string {
   const richText = block?.[block.type]?.rich_text ?? [];
-  return richTextToPlainText(richText);
+  return richText.map((item: any) => item.plain_text ?? "").join("");
 }
 
 export async function getPageBlocks(pageId: string): Promise<BlogBlock[]> {
@@ -244,7 +250,10 @@ export async function getPageBlocks(pageId: string): Promise<BlogBlock[]> {
             ? (block.image.file?.url ?? null)
             : null;
 
-      const caption = richTextToPlainText(block.image?.caption ?? []);
+      const caption =
+        block.image?.caption
+          ?.map((item: any) => item.plain_text ?? "")
+          .join("") ?? "";
 
       return {
         type: "image",
@@ -254,11 +263,36 @@ export async function getPageBlocks(pageId: string): Promise<BlogBlock[]> {
       } as BlogBlock;
     }
 
+    const richText = block?.[block.type]?.rich_text ?? [];
+
     return {
       type: block.type,
       text: blockText(block),
+      richText: mapRichText(richText),
     } as BlogBlock;
   });
+}
+
+export type RichTextSpan = {
+  text: string;
+  href: string | null;
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  strikethrough: boolean;
+  code: boolean;
+};
+
+function mapRichText(richText: any[] = []): RichTextSpan[] {
+  return richText.map((item) => ({
+    text: item.plain_text ?? "",
+    href: item.href ?? item.text?.link?.url ?? null,
+    bold: Boolean(item.annotations?.bold),
+    italic: Boolean(item.annotations?.italic),
+    underline: Boolean(item.annotations?.underline),
+    strikethrough: Boolean(item.annotations?.strikethrough),
+    code: Boolean(item.annotations?.code),
+  }));
 }
 
 export function renderBlocksToHtml(

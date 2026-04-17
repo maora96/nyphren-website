@@ -111,19 +111,25 @@ export async function getProjectBySlug(
 }
 
 export type ProjectBlock =
-  | { type: "paragraph"; text: string }
-  | { type: "heading_1"; text: string }
-  | { type: "heading_2"; text: string }
-  | { type: "heading_3"; text: string }
-  | { type: "bulleted_list_item"; text: string }
-  | { type: "numbered_list_item"; text: string }
-  | { type: "quote"; text: string }
-  | { type: "image"; text: string; imageUrl: string | null; caption?: string }
+  | { type: "paragraph"; text: string; richText: RichTextSpan[] }
+  | { type: "heading_1"; text: string; richText: RichTextSpan[] }
+  | { type: "heading_2"; text: string; richText: RichTextSpan[] }
+  | { type: "heading_3"; text: string; richText: RichTextSpan[] }
+  | { type: "bulleted_list_item"; text: string; richText: RichTextSpan[] }
+  | { type: "numbered_list_item"; text: string; richText: RichTextSpan[] }
+  | { type: "quote"; text: string; richText: RichTextSpan[] }
+  | {
+      type: "image";
+      text: string;
+      imageUrl: string | null;
+      caption?: string;
+      richText: RichTextSpan[];
+    }
   | { type: "unsupported"; text: "" };
 
 function blockText(block: any): string {
   const richText = block?.[block.type]?.rich_text ?? [];
-  return richTextToPlainText(richText);
+  return richText.map((item: any) => item.plain_text ?? "").join("");
 }
 
 export async function getProjectBlocks(
@@ -143,7 +149,12 @@ export async function getProjectBlocks(
       "bulleted_list_item",
       "numbered_list_item",
       "quote",
+      "image",
     ];
+
+    if (!supported.includes(block.type)) {
+      return { type: "unsupported", text: "" } as ProjectBlock;
+    }
 
     if (block.type === "image") {
       const imageUrl =
@@ -153,7 +164,10 @@ export async function getProjectBlocks(
             ? (block.image.file?.url ?? null)
             : null;
 
-      const caption = richTextToPlainText(block.image?.caption ?? []);
+      const caption =
+        block.image?.caption
+          ?.map((item: any) => item.plain_text ?? "")
+          .join("") ?? "";
 
       return {
         type: "image",
@@ -163,13 +177,34 @@ export async function getProjectBlocks(
       } as ProjectBlock;
     }
 
-    if (!supported.includes(block.type)) {
-      return { type: "unsupported", text: "" } as ProjectBlock;
-    }
+    const richText = block?.[block.type]?.rich_text ?? [];
 
     return {
       type: block.type,
       text: blockText(block),
+      richText: mapRichText(richText),
     } as ProjectBlock;
   });
+}
+
+export type RichTextSpan = {
+  text: string;
+  href: string | null;
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  strikethrough: boolean;
+  code: boolean;
+};
+
+function mapRichText(richText: any[] = []): RichTextSpan[] {
+  return richText.map((item) => ({
+    text: item.plain_text ?? "",
+    href: item.href ?? item.text?.link?.url ?? null,
+    bold: Boolean(item.annotations?.bold),
+    italic: Boolean(item.annotations?.italic),
+    underline: Boolean(item.annotations?.underline),
+    strikethrough: Boolean(item.annotations?.strikethrough),
+    code: Boolean(item.annotations?.code),
+  }));
 }

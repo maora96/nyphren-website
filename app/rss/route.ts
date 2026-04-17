@@ -9,30 +9,30 @@ function renderBlocksToHtml(
       if (!block.text) return "";
 
       if (block.type === "heading_1") {
-        return `<h1>${block.text}</h1>`;
+        return `<h1>${renderRichText(block.richText)}</h1>`;
       }
 
       if (block.type === "heading_2") {
-        return `<h2>${block.text}</h2>`;
+        return `<h2>${renderRichText(block.richText)}</h2>`;
       }
 
       if (block.type === "heading_3") {
-        return `<h3>${block.text}</h3>`;
+        return `<h3>${renderRichText(block.richText)}</h3>`;
       }
 
       if (block.type === "quote") {
-        return `<blockquote>${block.text}</blockquote>`;
+        return `<blockquote>${renderRichText(block.richText)}</blockquote>`;
       }
 
       if (block.type === "bulleted_list_item") {
-        return `<ul><li>${block.text}</li></ul>`;
+        return `<ul><li>${renderRichText(block.richText)}</li></ul>`;
       }
 
       if (block.type === "numbered_list_item") {
-        return `<ol><li>${block.text}</li></ol>`;
+        return `<ol><li>${renderRichText(block.richText)}</li></ol>`;
       }
 
-      return `<p>${block.text}</p>`;
+      return `<p>${renderRichText(block.richText)}</p>`;
     })
     .join("");
 }

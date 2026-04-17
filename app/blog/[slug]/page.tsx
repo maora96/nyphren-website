@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getPageBlocks, getPostBySlug } from "@/lib/blog";
 import Nav from "@/app/components/navbar";
 import NewsletterForm from "@/app/components/newsletter";
+import { renderRichText } from "@/app/components/render-rich-text";
 export const revalidate = 60;
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -73,7 +74,7 @@ export default async function PostPage({ params }: PageProps) {
                       key={i}
                       className="mb-5 mt-10 text-4xl text-[#30253E] [font-family:var(--font-playfair),serif]"
                     >
-                      {block.text}
+                      {renderRichText(block.richText)}
                     </h2>
                   );
                 }
@@ -84,7 +85,7 @@ export default async function PostPage({ params }: PageProps) {
                       key={i}
                       className="mb-4 mt-8 text-3xl text-[#30253E] [font-family:var(--font-playfair),serif]"
                     >
-                      {block.text}
+                      {renderRichText(block.richText)}
                     </h3>
                   );
                 }
@@ -95,7 +96,7 @@ export default async function PostPage({ params }: PageProps) {
                       key={i}
                       className="mb-4 mt-6 text-2xl text-[#30253E] [font-family:var(--font-playfair),serif]"
                     >
-                      {block.text}
+                      {renderRichText(block.richText)}
                     </h4>
                   );
                 }
@@ -106,7 +107,7 @@ export default async function PostPage({ params }: PageProps) {
                       key={i}
                       className="my-8 border-l-4 border-[#94C7B4] pl-5 text-[18px] italic leading-9 text-[#4f4b52]"
                     >
-                      {block.text}
+                      {renderRichText(block.richText)}
                     </blockquote>
                   );
                 }
@@ -117,7 +118,7 @@ export default async function PostPage({ params }: PageProps) {
                       key={i}
                       className="ml-6 list-disc text-[18px] leading-9 text-[#4f4b52]"
                     >
-                      {block.text}
+                      {renderRichText(block.richText)}
                     </li>
                   );
                 }
@@ -128,7 +129,7 @@ export default async function PostPage({ params }: PageProps) {
                       key={i}
                       className="ml-6 list-decimal text-[18px] leading-9 text-[#4f4b52]"
                     >
-                      {block.text}
+                      {renderRichText(block.richText)}
                     </li>
                   );
                 }
@@ -152,13 +153,13 @@ export default async function PostPage({ params }: PageProps) {
                     </figure>
                   );
                 }
-                if (!block.text) return null;
+                if (!block.richText) return null;
                 return (
                   <p
                     key={i}
                     className="mb-5 text-[18px] leading-9 text-[#4f4b52]"
                   >
-                    {block.text}
+                    {renderRichText(block.richText)}
                   </p>
                 );
               })}
