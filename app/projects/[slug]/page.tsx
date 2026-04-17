@@ -190,16 +190,16 @@ export default async function ProjectPage({ params }: PageProps) {
                   );
                 }
 
-                if (!block.text) return null;
+                if (!block.richText) return null;
 
-                // return (
-                //   <p
-                //     key={i}
-                //     className="mb-5 text-[18px] leading-9 text-[#4f4b52]"
-                //   >
-                //     {renderRichText(block.richText)}
-                //   </p>
-                // );
+                return (
+                  <p
+                    key={i}
+                    className="mb-5 text-[18px] leading-9 text-[#4f4b52]"
+                  >
+                    {renderRichText(block.richText)}
+                  </p>
+                );
               })}
             </div>
           </div>

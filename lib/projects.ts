@@ -125,7 +125,7 @@ export type ProjectBlock =
       caption?: string;
       richText: RichTextSpan[];
     }
-  | { type: "unsupported"; text: "" };
+  | { type: "unsupported"; text: ""; richText: RichTextSpan[] };
 
 function blockText(block: any): string {
   const richText = block?.[block.type]?.rich_text ?? [];
@@ -153,7 +153,7 @@ export async function getProjectBlocks(
     ];
 
     if (!supported.includes(block.type)) {
-      return { type: "unsupported", text: "" } as ProjectBlock;
+      return { type: "unsupported", text: "", richText: [] } as ProjectBlock;
     }
 
     if (block.type === "image") {
@@ -172,6 +172,7 @@ export async function getProjectBlocks(
       return {
         type: "image",
         text: "",
+        richText: [],
         imageUrl,
         caption,
       } as ProjectBlock;
