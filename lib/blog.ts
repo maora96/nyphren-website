@@ -206,6 +206,7 @@ export type BlogBlock =
   | { type: "bulleted_list_item"; text: string }
   | { type: "numbered_list_item"; text: string }
   | { type: "quote"; text: string }
+  | { type: "image"; text: string; imageUrl: string | null; caption?: string }
   | { type: "unsupported"; text: "" };
 
 function blockText(block: any): string {
@@ -228,10 +229,29 @@ export async function getPageBlocks(pageId: string): Promise<BlogBlock[]> {
       "bulleted_list_item",
       "numbered_list_item",
       "quote",
+      "image",
     ];
 
     if (!supported.includes(block.type)) {
       return { type: "unsupported", text: "" } as BlogBlock;
+    }
+
+    if (block.type === "image") {
+      const imageUrl =
+        block.image?.type === "external"
+          ? (block.image.external?.url ?? null)
+          : block.image?.type === "file"
+            ? (block.image.file?.url ?? null)
+            : null;
+
+      const caption = richTextToPlainText(block.image?.caption ?? []);
+
+      return {
+        type: "image",
+        text: "",
+        imageUrl,
+        caption,
+      } as BlogBlock;
     }
 
     return {

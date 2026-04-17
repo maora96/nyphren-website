@@ -103,8 +103,6 @@ export default async function ProjectPage({ params }: PageProps) {
 
             <div className="relative z-10">
               {blocks.map((block, i) => {
-                if (!block.text) return null;
-
                 if (block.type === "heading_1") {
                   return (
                     <h2
@@ -170,6 +168,28 @@ export default async function ProjectPage({ params }: PageProps) {
                     </li>
                   );
                 }
+
+                if (block.type === "image" && block.imageUrl) {
+                  return (
+                    <figure key={i} className="my-8">
+                      <div className="overflow-hidden rounded-[1.25rem]">
+                        <img
+                          src={block.imageUrl}
+                          alt={block.caption || project.title}
+                          className="w-full object-cover"
+                        />
+                      </div>
+
+                      {block.caption ? (
+                        <figcaption className="mt-3 text-center text-sm text-[#7a7578]">
+                          {block.caption}
+                        </figcaption>
+                      ) : null}
+                    </figure>
+                  );
+                }
+
+                if (!block.text) return null;
 
                 return (
                   <p

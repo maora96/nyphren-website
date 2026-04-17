@@ -9,14 +9,11 @@ export default async function NewsletterArchivePage() {
   const cookieStore = await cookies();
   const accessCookie = cookieStore.get("newsletter_access")?.value;
 
-  console.log("Access cookie:", accessCookie); // Debugging line
-  console.log("Expected key:", process.env.NEWSLETTER_ARCHIVE_KEY); // Debugging line
-
   if (
     !process.env.NEWSLETTER_ARCHIVE_KEY ||
     accessCookie !== process.env.NEWSLETTER_ARCHIVE_KEY
   ) {
-    //redirect("/subscribe");
+    redirect("/subscribe");
   }
 
   const posts = await getNewsletterArchivePosts();
