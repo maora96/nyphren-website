@@ -52,8 +52,6 @@ export async function POST(req: NextRequest) {
       ],
     });
 
-    // If the contact already exists, Resend may return an error.
-
     if (error) {
       return NextResponse.json(
         { success: false, message: error.message },

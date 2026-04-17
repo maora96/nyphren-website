@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
 
     const publicPosts = posts.filter((p) => p.showOnBlog);
     const exclusivePosts = posts.filter((p) => !p.showOnBlog);
-    const archiveUrl = `https://nyphren.com/newsletter/access?key=${process.env.NEWSLETTER_ARCHIVE_KEY}`;
+    const archiveUrl = `https://nyphren.com/api/newsletter/access?key=${process.env.NEWSLETTER_ARCHIVE_KEY}`;
 
     const publicHtml = await Promise.all(
       publicPosts.map(async (post) => {

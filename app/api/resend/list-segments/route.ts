@@ -1,4 +1,3 @@
-// app/api/resend/list-segments/route.ts
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
