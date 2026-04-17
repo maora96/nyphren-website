@@ -1,12 +1,14 @@
+import { getAllPublishedWorks } from "@/lib/published-works";
 import Link from "next/link";
-import { getAllPublishedProjects } from "@/lib/projects";
 import Nav from "../components/navbar";
 export const revalidate = 60;
-export default async function ProjectsPage() {
-  const projects = await getAllPublishedProjects();
-  const featured = projects.find((project) => project.featured) ?? projects[0];
-  const otherProjects = projects.filter(
-    (project) => project.id !== featured?.id,
+
+export default async function PublishedWorksPage() {
+  const publishedWorks = await getAllPublishedWorks();
+  const featured =
+    publishedWorks.find((work) => work.featured) ?? publishedWorks[0];
+  const otherPublishedWorks = publishedWorks.filter(
+    (work) => work.id !== featured?.id,
   );
 
   return (
@@ -22,11 +24,11 @@ export default async function ProjectsPage() {
 
         <div className="mx-auto max-w-4xl px-6 pb-24 pt-20 text-center">
           <p className="mb-4 text-sm uppercase tracking-[0.24em] text-[#94C7B4]">
-            Projects
+            Published Works
           </p>
 
           <h1 className="mb-6 text-5xl leading-[1.02] text-[#f7f4ee] md:text-7xl [font-family:var(--font-playfair),serif]">
-            Things I'm building
+            Things I published
           </h1>
 
           <p className="mx-auto max-w-2xl text-[16px] leading-8 text-white/75">
@@ -35,11 +37,11 @@ export default async function ProjectsPage() {
         </div>
       </section>
 
-      {/* FEATURED PROJECT */}
+      {/* FEATURED PUBLISHED WORK */}
       {featured && (
         <section className="-mt-10 px-6 pb-16">
           <div className="mx-auto max-w-6xl">
-            <Link href={`/projects/${featured.slug}`} className="block">
+            <Link href={`/published-works/${featured.slug}`} className="block">
               <div className="relative overflow-hidden rounded-[2rem] bg-[#f3efe7] shadow-[0_20px_50px_rgba(0,0,0,0.12)] transition hover:-translate-y-1">
                 <div className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-multiply">
                   <img
@@ -52,7 +54,7 @@ export default async function ProjectsPage() {
                 <div className="grid gap-10 px-8 py-10 md:grid-cols-2 md:px-12">
                   <div className="relative z-10">
                     <p className="mb-3 text-xs uppercase tracking-[0.2em] text-[#638872]">
-                      Featured Project
+                      Featured Published Work
                     </p>
 
                     <h2 className="mb-4 text-4xl text-[#30253E] [font-family:var(--font-playfair),serif]">
@@ -74,18 +76,11 @@ export default async function ProjectsPage() {
                       ))}
                     </div>
 
-                    {featured.status && (
-                      <p className="mb-6 text-sm text-[#7a7578]">
-                        Status: {featured.status}
-                      </p>
-                    )}
-
                     <span className="inline-block rounded-full bg-gradient-to-r from-[#638872] to-[#94C7B4] px-6 py-2 text-white shadow transition hover:scale-105">
-                      Explore project
+                      Explore work
                     </span>
                   </div>
 
-                  {/* <div className="relative min-h-[240px] rounded-[1.5rem] bg-gradient-to-br from-[#94C7B4]/40 via-[#f3efe7] to-[#30253E]/10" /> */}
                   <div className="relative min-h-[220px] overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#94C7B4]/35 via-[#f3efe7] to-[#30253E]/10">
                     {featured.coverUrl ? (
                       <>
@@ -114,10 +109,10 @@ export default async function ProjectsPage() {
       {/* PROJECT GRID */}
       <section className="px-6 pb-24">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2">
-          {otherProjects.map((project) => (
+          {otherPublishedWorks.map((work) => (
             <Link
-              key={project.id}
-              href={`/projects/${project.slug}`}
+              key={work.id}
+              href={`/published-works/${work.slug}`}
               className="block"
             >
               <div className="group relative overflow-hidden rounded-[2rem] border border-black/5 bg-[#f3efe7]/88 p-8 shadow-[0_10px_28px_rgba(0,0,0,0.08)] transition hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(0,0,0,0.12)]">
@@ -133,21 +128,21 @@ export default async function ProjectsPage() {
 
                 <div className="relative z-10 flex h-full flex-col">
                   <h3 className="mb-4 text-3xl text-[#30253E] [font-family:var(--font-playfair),serif]">
-                    {project.title}
+                    {work.title}
                   </h3>
 
                   <p className="mb-6 leading-8 text-[#4f4b52]">
-                    {project.description}
+                    {work.description}
                   </p>
 
                   <div className="mb-6">
                     <span className="inline-block text-sm font-medium text-[#638872] transition group-hover:translate-x-1 group-hover:text-[#30253E]">
-                      Explore project →
+                      Explore work →
                     </span>
                   </div>
 
                   <div className="mt-auto mb-4 flex flex-wrap gap-2 text-xs">
-                    {project.tags.map((tag) => (
+                    {work.tags.map((tag) => (
                       <span
                         key={tag}
                         className="rounded-full bg-[#d9ddd2]/90 px-3 py-1 text-[#4c5147]"
@@ -156,12 +151,6 @@ export default async function ProjectsPage() {
                       </span>
                     ))}
                   </div>
-
-                  {project.status && (
-                    <p className="text-sm text-[#7a7578]">
-                      Status: {project.status}
-                    </p>
-                  )}
                 </div>
               </div>
             </Link>

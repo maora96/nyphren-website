@@ -30,6 +30,13 @@ export default function Nav() {
             blog
           </Link>
 
+          <Link
+            href="/published-works"
+            className={linkClass("/published-works")}
+          >
+            published works
+          </Link>
+
           <Link href="/projects" className={linkClass("/projects")}>
             projects
           </Link>

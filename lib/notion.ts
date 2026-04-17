@@ -12,6 +12,10 @@ if (!process.env.NOTION_PROJECTS_DATA_SOURCE_ID) {
   throw new Error("Missing NOTION_PROJECTS_DATA_SOURCE_ID");
 }
 
+if (!process.env.NOTION_PUBLISHED_WORKS_DATA_SOURCE_ID) {
+  throw new Error("Missing NOTION_PUBLISHED_WORKS_DATA_SOURCE_ID");
+}
+
 export const notion = new Client({
   auth: process.env.NOTION_API_KEY,
 });
@@ -20,3 +24,5 @@ export const NOTION_BLOG_DATA_SOURCE_ID =
   process.env.NOTION_BLOG_DATA_SOURCE_ID;
 export const NOTION_PROJECTS_DATA_SOURCE_ID =
   process.env.NOTION_PROJECTS_DATA_SOURCE_ID;
+export const NOTION_PUBLISHED_WORKS_DATA_SOURCE_ID =
+  process.env.NOTION_PUBLISHED_WORKS_DATA_SOURCE_ID;
